@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/wakelesstuna/tracker/internal/ical"
 	"github.com/wakelesstuna/tracker/internal/pushups"
@@ -40,6 +41,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/", handler)
 
-	fmt.Println("Running on :8080")
-	http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Printf("Server running on port %s", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
